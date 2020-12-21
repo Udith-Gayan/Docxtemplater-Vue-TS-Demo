@@ -1,9 +1,7 @@
 <template>
   <div>
-    <button @click="getDoc">Generate Doc</button>
-    <br />
-    <input type="file" @change="handleFileChange"  />
-    <button @click="getPdf">Convert to pdf</button>
+    <button @click="getDoc">Download Word Document</button>
+
   </div>
 </template>
 
@@ -13,8 +11,7 @@
   import docxtemplater from 'docxtemplater';
   import JSZip from 'jszip';
   import JSzipUtils from 'jszip-utils';
-  import  saveAs  from 'file-saver'; 
-  import convertToPdf from 'docx-pdf';
+  import  saveAs  from 'file-saver';
 
   @Component(
     {
@@ -25,66 +22,6 @@
   )
   export default class HelloWorld extends Vue {
 
-    fileDate: any;
-
-    handleFileChange(e: any){
-      this.fileDate = e.target.files[0];
-      console.log(this.fileDate);
-
-    }
-
-    getPdf() {
-      const form = new FormData();
-      form.append("Filecontent", this.fileDate);
-      
-      fetch("https://converter-docx-to-pdf.p.rapidapi.com/convertDOCXtoPDF", {
-      	"method": "POST",
-      	"headers": {
-      		"content-type": "multipart/form-data; boundary=---011000010111000001101001",
-      		"x-rapidapi-key": "a38c2d611bmsh044a92e5329b542p153171jsn729b4c074c87",
-      		"x-rapidapi-host": "converter-docx-to-pdf.p.rapidapi.com"
-        },
-        body: form
-      })
-      .then(response => {
-        const reader = response.body.getReader();
-        const stream = new ReadableStream({
-          start(controller) {
-            // The following function handles each data chunk
-            function push() {
-              // "done" is a Boolean and value a "Uint8Array"
-              reader.read().then(({ done, value }) => {
-                
-                // Is there no more data to read?
-                if (done) {
-                  // Tell the browser that we have finished sending data
-                  controller.close();
-                  return;
-                }
-
-                // Get the data and send it to the browser via the controller
-                controller.enqueue(value);
-                push();
-              });
-            };
-
-            push();
-          }
-        });
-
-        return new Response(stream, { headers: { "Content-Type": "application/pdf" } });
-      })
-      .then(response => response.blob())
-      .then(blob => {
-        // URL.createObjectURL(blob);
-        console.log(blob);
-        saveAs(blob, "newpdfff.pdf");
-        })
-      .catch(err => {
-      	console.error(err);
-      });
-    }
-
     getDoc() {
       this.createDOC();
     }
@@ -93,19 +30,17 @@
         JSzipUtils.getBinaryContent(url,callback);
     }
 
-    // loadFileFromLocal(url: any,callback: any){
-    //     return new Promise((resolve,reject) => {
-    //       const fr = new FileReader();
-    //       let file = fr.readAsArrayBuffer('template.docx');
-    //     });
-    // }
-
     createDOC(){
+      /*
+      *   This required JSON dataset must be fetched from the backend API.
+      *   The tags in the template will be replaced by these data.
+      *   For demonstrations, I have hardcoded the tesdt dataset
+      */
         let dataset = {
           "clients": [
             {
               "first_name": "Udith",
-              "last_name": "Gayan",
+              "last_name": "Indrakantha",
               "phone": "+44546546454"
             },
             {
@@ -120,6 +55,12 @@
           description: "New Website"
         };
 
+        /* *
+        * The template's path must be passed as an arguement .
+        * This path can be either a URL(as  in the commented line) or a path relative to the Public folder
+        * For testing, I have created a folder named  "doctemplates" inside the public folder and it contains my sample
+        * template named "template.docx" .
+        * */
         // this.loadFile("https://docxtemplater.com/tag-example.docx",function(error: any,content : any){
           this.loadFile('doctemplates/template.docx',function(error: any,content : any){
             if (error) { 
@@ -148,22 +89,11 @@
             }
 
 // docx generator
-            // let out = doc.getZip().generate({
-            //     type:"blob",
-            //     mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            //     })
-            // saveAs(out,`testbyudith.docx`);
-
-// pdf generator test
             let out = doc.getZip().generate({
                 type:"blob",
-                mimeType: "application/pdf",
+                mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 })
-
-             console.log(out) 
-             
-             let outt = new File([out], 'test.pdf')
-            saveAs(outt,`testtttbyudith.pdf`);        
+            saveAs(out,`testbyudith.docx`);    // You can pass this blob to a custom file saver component in the project.  
         });
 
     }
