@@ -8,7 +8,14 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "awesome-unoconv": "^1.0.1",
     "core-js": "^3.6.5",
+    "docx-pdf": "0.0.1",
+    "docxtemplater": "^3.19.7",
+    "file-saver": "^2.0.5",
+    "jszip": "^2.6.1",
+    "jszip-utils": "^0.1.0",
+    "pizzip": "^3.0.6",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^8.4.2",
