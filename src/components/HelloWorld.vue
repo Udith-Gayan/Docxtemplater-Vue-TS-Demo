@@ -49,10 +49,10 @@
               "phone": "+445476454"
             }
           ],
-          first_name: "John",
-          last_name: "Doe",
+          creater_name: "Udith Gayan Indrakantha",
+          tested_date: "22/12/2020",
           phone: "0652455478",
-          description: "New Website"
+          header: "Apex Website Docx Creation Testing"
         };
 
         /* *
@@ -93,7 +93,7 @@
                 type:"blob",
                 mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 })
-            saveAs(out,`testbyudith.docx`);    // You can pass this blob to a custom file saver component in the project.  
+            saveAs(out,`FinaleDoc.docx`);    // You can pass this blob to a custom file saver component in the project.  
         });
 
     }
