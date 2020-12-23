@@ -92,6 +92,7 @@
             let out = doc.getZip().generate({
                 type:"blob",
                 mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+
                 })
             saveAs(out,`FinaleDoc.docx`);    // You can pass this blob to a custom file saver component in the project.  
         });
