@@ -1,5 +1,2 @@
 
-  // declare module "convertApiModule" {
-  //   export =  'convertapi-js';
-  //   export default apis;
-  // }
+  declare module "convertapi-js";

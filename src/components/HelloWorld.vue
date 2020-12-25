@@ -15,12 +15,9 @@
   import JSZip from 'jszip';
   import JSzipUtils from 'jszip-utils';
   import  saveAs  from 'file-saver';
-  import  {ConvertApi} from 'convertapi-js';
+  // import  ConvertApi from 'convertapi-js';
   import convertToPdf from 'docx-pdf';
-  // import * as apis from 'apis';
-  // import '@/convertapi-js-master/src/convertapi'
 
-  // import VueGoogleApi from 'vue-google-api';
 
   @Component(
     {
@@ -31,15 +28,6 @@
   )
   export default class HelloWorld extends Vue {
 
-    config = {
-                      apiKey: 'AIzaSyBl__HXmM-BGhbLWr5XrO7TkMeNA2whrT8',
-                      clientId: '758058407223-hvomncjkfm1up5eoa0s7fd2sb9bdc5hr.apps.googleusercontent.com',
-                      scope: 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file',
-                      discoveryDocs: [ 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest' ]
-    }
-    
-   GoogleAuth: any;
-
    convertApi : any;
    selectedFile: any;
 
@@ -47,7 +35,7 @@
     }
 
   mounted() {
-    this.convertApi =  ConvertApi.auth({secret: 'LKKvvknbz7Tftz8p', apiKey: '112058292', token: ''});
+    this.convertApi =  ConvertApi.auth({secret: 'LKKvvknbz7Tftz8p', apiKey: '112058292', token: ''}); // convertAPI
     
   }
 
@@ -70,18 +58,20 @@
 
   async convertthedocToPdf(){
     if(this.selectedFile){
-      // let params = this.convertApi.createParams()
-      // params.add('file', this.selectedFile);
-      // let result = await this.convertApi.convert('docx', 'pdf', params);
-      // let url = result.files[0].Url;
-      // console.log(url);
-      const filePath = URL.createObjectURL(this.selectedFile);
-      console.log(filePath);
-      // D:\Apex\Other related tasks and documents\RD on docxtemplater\Demo Vue Project\docstemplater-demo\public\doctemplates
-      let ss = convertToPdf('./doctemplates/template.docx', './testpdf.pdf', (err:any, res:any) => {
-        console.log(err);
-        console.log(res);
-      })
+
+      let params = this.convertApi.createParams()
+      params.add('file', this.selectedFile);
+      let result = await this.convertApi.convert('docx', 'pdf', params);
+      let url = result.files[0].Url;
+      console.log(url);
+
+      // const filePath = URL.createObjectURL(this.selectedFile);
+      // console.log(filePath);
+      // let ss = convertToPdf('./doctemplates/template.docx', './testpdf.pdf', (err:any, res:any) => {
+      //   debugger
+      //   console.log(err);
+      //   console.log(res);
+      // })
     } else {
       alert(" No file selected");
     }
