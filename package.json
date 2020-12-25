@@ -8,11 +8,15 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@types/gapi": "0.0.39",
+    "@types/gapi.client": "^1.0.3",
     "awesome-unoconv": "^1.0.1",
+    "convertapi-js": "^1.0.6",
     "core-js": "^3.6.5",
     "docx-pdf": "0.0.1",
     "docxtemplater": "^3.19.7",
     "file-saver": "^2.0.5",
+    "gapi-client": "0.0.3",
     "jszip": "^2.6.1",
     "jszip-utils": "^0.1.0",
     "pizzip": "^3.0.6",

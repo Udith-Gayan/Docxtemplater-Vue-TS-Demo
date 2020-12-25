@@ -1,10 +1,13 @@
 <template>
   <div>
     <button @click="getDoc">Download Word Document</button>
+    <br />
+    <input type="file" id="fileinput" @change="selectFile" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+    <button @click="convertthedocToPdf">Convert and download</button>
 
   </div>
 </template>
-
+<script src="https://apis.google.com/js/api.js"></script>
 <script lang="ts">
 /* eslint-disable */
   import { Component, Prop, Vue } from "vue-property-decorator";
@@ -12,6 +15,12 @@
   import JSZip from 'jszip';
   import JSzipUtils from 'jszip-utils';
   import  saveAs  from 'file-saver';
+  import  {ConvertApi} from 'convertapi-js';
+  import convertToPdf from 'docx-pdf';
+  // import * as apis from 'apis';
+  // import '@/convertapi-js-master/src/convertapi'
+
+  // import VueGoogleApi from 'vue-google-api';
 
   @Component(
     {
@@ -22,6 +31,64 @@
   )
   export default class HelloWorld extends Vue {
 
+    config = {
+                      apiKey: 'AIzaSyBl__HXmM-BGhbLWr5XrO7TkMeNA2whrT8',
+                      clientId: '758058407223-hvomncjkfm1up5eoa0s7fd2sb9bdc5hr.apps.googleusercontent.com',
+                      scope: 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file',
+                      discoveryDocs: [ 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest' ]
+    }
+    
+   GoogleAuth: any;
+
+   convertApi : any;
+   selectedFile: any;
+
+  created() {
+    }
+
+  mounted() {
+    this.convertApi =  ConvertApi.auth({secret: 'LKKvvknbz7Tftz8p', apiKey: '112058292', token: ''});
+    
+  }
+
+  //  mount(){
+  //    window.gapi.load('client:auth2', this.initClient);
+  //  }
+
+  //  initClient() {
+  //    window.gapi.client.init(this.config).then((value:any) => {
+  //      console.log("Authenticated");
+  //    });
+  //  }
+
+
+  selectFile(event: any){
+    console.log('File selected');
+    console.log(event.target.files[0])
+    this.selectedFile = event.target.files[0];
+  }
+
+  async convertthedocToPdf(){
+    if(this.selectedFile){
+      // let params = this.convertApi.createParams()
+      // params.add('file', this.selectedFile);
+      // let result = await this.convertApi.convert('docx', 'pdf', params);
+      // let url = result.files[0].Url;
+      // console.log(url);
+      const filePath = URL.createObjectURL(this.selectedFile);
+      console.log(filePath);
+      // D:\Apex\Other related tasks and documents\RD on docxtemplater\Demo Vue Project\docstemplater-demo\public\doctemplates
+      let ss = convertToPdf('./doctemplates/template.docx', './testpdf.pdf', (err:any, res:any) => {
+        console.log(err);
+        console.log(res);
+      })
+    } else {
+      alert(" No file selected");
+    }
+  }
+
+
+ /*  Below code is related to the generation of docx from the given template */
     getDoc() {
       this.createDOC();
     }
